@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import Any, Optional
+from pydantic import BaseModel
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -11,9 +12,9 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=40)
 
 
-# class UserRegister(SQLModel):
-#     username: str = Field(max_length=255)
-#     password: str = Field(min_length=8, max_length=40)
+class UserRegister(SQLModel):
+    username: str = Field(max_length=255)
+    password: str = Field(min_length=8, max_length=40)
 
 
 # Database model, database table inferred from class name
@@ -55,12 +56,19 @@ class MessagePublic(MessageBase):
     from_chatbot: bool
 
 
+class MessagesPublic(BaseModel):
+    data: list[MessagePublic]
+
+
 # JSON payload containing access token
 class Token(SQLModel):
     access_token: str
-    token_type: str = "bearer"
 
 
 # Contents of JWT token
 class TokenPayload(SQLModel):
     sub: Optional[str] = None
+
+
+class ResponseDetails(SQLModel):
+    detail: str

@@ -6,7 +6,7 @@ from app.core.security import get_password_hash, verify_password
 from app.models import (
     Message,
     MessageCreate,
-    MessagePublic,
+    MessagesPublic,
     MessageUpdate,
     User,
     UserCreate,
@@ -14,9 +14,6 @@ from app.models import (
 
 
 def get_user(session: Session, user_id: str):
-    statement = select(User)
-    users = session.exec(statement).all()
-    print(User(data=users))
     return session.get(User, user_id)
 
 
@@ -32,8 +29,7 @@ def create_user(session: Session, user: UserCreate):
 
 def get_messages(session: Session, user_id: str):
     statement = select(Message).where(Message.user_id == user_id)
-    users = session.exec(statement).all()
-    return MessagePublic(data=users)
+    return session.exec(statement).all()
 
 
 def create_message(session: Session, message: MessageCreate, user_id: str):

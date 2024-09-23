@@ -1,15 +1,22 @@
+import random
 from typing import Any
 
 from fastapi import APIRouter
 from app.crud import get_messages, create_message, update_message, delete_message
-from app.models import Message, MessageCreate, MessageUpdate
+from app.models import (
+    Message,
+    MessageCreate,
+    MessageUpdate,
+    MessagePublic,
+    ResponseDetails,
+)
 
 from app.api.deps import CurrentUser, SessionDep
 
 router = APIRouter()
 
 
-@router.get("/", response_model=Message)
+@router.get("/", response_model=list[MessagePublic])
 def read_messages(
     session: SessionDep,
     current_user: CurrentUser,
@@ -17,9 +24,7 @@ def read_messages(
     """
     Retrieve messages.
     """
-    statement = get_messages(session, current_user.id)
-    messages = session.exec(statement).all()
-    return Message(data=messages)
+    return get_messages(session, current_user.id)
 
 
 @router.post("/", response_model=Message)
@@ -29,7 +34,10 @@ def send_message(
     """
     Create new message.
     """
-    return create_message(session, message_in, current_user.id)
+    message = create_message(session, message_in, current_user.id)
+
+    trigger_chatbot_response(session, current_user.id)
+    return message
 
 
 @router.put("/{id}", response_model=Message)
@@ -52,4 +60,18 @@ def remove_message(session: SessionDep, current_user: CurrentUser, id: int) -> M
     Delete an message.
     """
     delete_message(session, id, current_user.id)
-    return Message(message="Message deleted successfully")
+    return ResponseDetails(detail="Message deleted successfully")
+
+
+def trigger_chatbot_response(session: SessionDep, user_id: str):
+    test_messages = [
+        "I am good. How are you today?",
+        "How's the weather?",
+        "Cloudy with a chance of rain. Sunshine in the afternoon.",
+    ]
+
+    create_message(
+        session,
+        MessageCreate(content=random.choice(test_messages), from_chatbot=True),
+        user_id,
+    )

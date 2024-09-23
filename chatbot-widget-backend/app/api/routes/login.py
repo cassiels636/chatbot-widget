@@ -1,27 +1,24 @@
 from datetime import timedelta
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException
 
 from app.crud import authenticate
 from app.api.deps import CurrentUser, SessionDep
 from app.core import security
 from app.core.config import settings
-from app.models import Token, UserPublic
+from app.models import Token, UserPublic, UserRegister
 
 router = APIRouter()
 
 
 @router.post("/login/access-token")
-def login_access_token(
-    session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-) -> Token:
+def login_access_token(session: SessionDep, user_login: UserRegister) -> Token:
     """
     OAuth2 compatible token login, get an access token for future requests
     """
     user = authenticate(
-        session=session, username=form_data.username, password=form_data.password
+        session=session, username=user_login.username, password=user_login.password
     )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")

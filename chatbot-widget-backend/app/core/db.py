@@ -2,8 +2,8 @@ from sqlalchemy import Engine
 from sqlmodel import SQLModel, Session, create_engine, select
 
 from app.core.config import settings
-from app.crud import create_user
-from app.models import User, UserCreate
+from app.crud import create_message, create_user
+from app.models import MessageCreate, User, UserCreate
 
 engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
 
@@ -23,3 +23,10 @@ def init_db(session: Session, engine: Engine) -> None:
         password=settings.FIRST_USER_PASSWORD,
     )
     user = create_user(session=session, user=user_in)
+
+    # Create default chatbot message
+    create_message(
+        session,
+        MessageCreate(content="Hello, Ask me a question.", from_chatbot=True),
+        user.id,
+    )
