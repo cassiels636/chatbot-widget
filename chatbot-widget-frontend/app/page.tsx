@@ -1,7 +1,6 @@
+"use client"
 import { Typography } from "@mui/material";
 import ChatButton from "./components/ChatButton";
-import { Provider } from "react-redux";
-import { store } from "./store";
 
 export default function Home() {
   return (
