@@ -40,7 +40,7 @@ def send_message(
     return message
 
 
-@router.put("/{id}", response_model=Message)
+@router.patch("/{id}", response_model=Message)
 def edit_message(
     *,
     session: SessionDep,

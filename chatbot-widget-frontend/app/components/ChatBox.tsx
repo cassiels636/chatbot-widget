@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ChatBotAvatar from "./ChatBotAvatar";
 import Message from "./Message";
-import { useGetMessagesQuery } from "../api/apiSlice";
+import { useGetMessagesQuery, useSendMessageMutation } from "../api/apiSlice";
 import ChatInput from "./ChatInput";
 
 interface ChatBoxProps {
@@ -17,18 +17,11 @@ interface ChatBoxProps {
 }
 
 export default function ChatBox({ onClose }: ChatBoxProps) {
-  // const messages: MessageType[] = [
-  //   { content: "Hello, Ask me a question.", fromChatBot: true },
-  //   { content: "How's the weather?", fromChatBot: false },
-  //   {
-  //     content: "Cloudy with a chance of rain. Sunshine in the afternoon.",
-  //     fromChatBot: true,
-  //   },
-  // ];
-
   const { data: messages, isFetching } = useGetMessagesQuery(undefined, {
     pollingInterval: 15000, // Check for new messages every 15 seconds
   });
+
+  const [sendMessage] = useSendMessageMutation();
 
   return (
     <Stack sx={{ margin: "10px", width: "400px" }}>
@@ -47,7 +40,7 @@ export default function ChatBox({ onClose }: ChatBoxProps) {
               return (
                 <Message
                   key={message.id}
-                  messageContent={message.content}
+                  message={message}
                   showAvatar={message.from_chatbot}
                   sxProps={{
                     margin: "10px",
@@ -58,7 +51,7 @@ export default function ChatBox({ onClose }: ChatBoxProps) {
             })}
           </Stack>
           <Divider />
-          <ChatInput />
+          <ChatInput onSubmit={sendMessage} />
         </>
       ) : (
         <CircularProgress sx={{ alignSelf: "center" }} />

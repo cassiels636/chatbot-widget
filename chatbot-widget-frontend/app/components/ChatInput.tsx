@@ -2,31 +2,23 @@
 import { IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import ChatBotAvatar from "./ChatBotAvatar";
 import { Send } from "@mui/icons-material";
-import { useSendMessageMutation } from "../api/apiSlice";
 import { useState } from "react";
+import { MessageForm } from "../types";
 
-interface ChatInputProps {}
+interface ChatInputProps {
+  onSubmit: (data: MessageForm) => void;
+  defaultValue?: string;
+}
 
-export default function ChatInput({}: ChatInputProps) {
-  const [messageInput, setMessageInput] = useState("");
-  // const messages: MessageType[] = [
-  //   { content: "Hello, Ask me a question.", fromChatBot: true },
-  //   { content: "How's the weather?", fromChatBot: false },
-  //   {
-  //     content: "Cloudy with a chance of rain. Sunshine in the afternoon.",
-  //     fromChatBot: true,
-  //   },
-  // ];
-
-  const [sendMessage] = useSendMessageMutation();
+export default function ChatInput({
+  onSubmit,
+  defaultValue = "",
+}: ChatInputProps) {
+  const [messageInput, setMessageInput] = useState(defaultValue);
 
   const handleClickSend = () => {
-    sendMessage({ content: messageInput, from_chatbot: false });
-    setMessageInput('');
-  };
-
-  const handleMouseDownUp = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+    onSubmit({ content: messageInput, from_chatbot: false });
+    setMessageInput("");
   };
 
   return (
@@ -48,12 +40,7 @@ export default function ChatInput({}: ChatInputProps) {
             ),
             endAdornment: (
               <InputAdornment position="end" sx={{ margin: "5px" }}>
-                <IconButton
-                  onClick={handleClickSend}
-                  onMouseDown={handleMouseDownUp}
-                  onMouseUp={handleMouseDownUp}
-                  edge="end"
-                >
+                <IconButton onClick={handleClickSend} edge="end">
                   <Send />
                 </IconButton>
               </InputAdornment>

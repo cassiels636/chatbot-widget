@@ -5,6 +5,7 @@ export interface Message {
 }
 
 export interface MessageForm {
+    id?: string;
     content: string;
     from_chatbot: boolean;
 }
