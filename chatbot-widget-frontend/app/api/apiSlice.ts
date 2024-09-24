@@ -33,7 +33,6 @@ const prepareHeaders = (
 ): Headers => {
   const combinedHeaders = new Headers(headers);
 
-  console.log(api?.endpoint);
   if (api?.endpoint) {
     const accessToken = localStorage.getItem("auth-token");
     if (accessToken) {
@@ -51,7 +50,6 @@ const baseQueryWithReauth: BaseQueryFn<
   const baseQuery = fetchBaseQuery({ baseUrl: BASE_URL, prepareHeaders });
 
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
   if (result?.error?.status === 403) {
     localStorage.removeItem("auth-token");
     await fetchAccessToken();

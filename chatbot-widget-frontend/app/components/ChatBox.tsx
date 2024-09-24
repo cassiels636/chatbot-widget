@@ -36,7 +36,6 @@ export default function ChatBox({ onClose }: ChatBoxProps) {
         <>
           <Stack height="450px" overflow="auto">
             {messages.map((message) => {
-              console.log(message.from_chatbot);
               return (
                 <Message
                   key={message.id}
