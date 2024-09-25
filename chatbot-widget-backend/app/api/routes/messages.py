@@ -20,17 +20,17 @@ router = APIRouter()
 def read_messages(
     session: SessionDep,
     current_user: CurrentUser,
-) -> Any:
+):
     """
     Retrieve messages.
     """
     return get_messages(session, current_user.id)
 
 
-@router.post("/", response_model=Message)
+@router.post("/", response_model=MessagePublic)
 def send_message(
     *, session: SessionDep, current_user: CurrentUser, message_in: MessageCreate
-) -> Any:
+):
     """
     Create new message.
     """
@@ -40,14 +40,14 @@ def send_message(
     return message
 
 
-@router.patch("/{id}", response_model=Message)
+@router.patch("/{id}", response_model=MessagePublic)
 def edit_message(
     *,
     session: SessionDep,
     current_user: CurrentUser,
     id: int,
     message_in: MessageUpdate,
-) -> Any:
+):
     """
     Update a message.
     """
@@ -55,7 +55,7 @@ def edit_message(
 
 
 @router.delete("/{id}")
-def remove_message(session: SessionDep, current_user: CurrentUser, id: int) -> Message:
+def remove_message(session: SessionDep, current_user: CurrentUser, id: int):
     """
     Delete an message.
     """

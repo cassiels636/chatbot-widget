@@ -1,13 +1,11 @@
 from datetime import timedelta
-from typing import Annotated, Any
-
 from fastapi import APIRouter, HTTPException
 
 from app.crud import authenticate
-from app.api.deps import CurrentUser, SessionDep
+from app.api.deps import SessionDep
 from app.core import security
 from app.core.config import settings
-from app.models import Token, UserPublic, UserRegister
+from app.models import Token, UserRegister
 
 router = APIRouter()
 
@@ -30,11 +28,3 @@ def login_access_token(session: SessionDep, user_login: UserRegister) -> Token:
             user.id, expires_delta=access_token_expires
         )
     )
-
-
-@router.post("/login/test-token", response_model=UserPublic)
-def test_token(current_user: CurrentUser) -> Any:
-    """
-    Test access token
-    """
-    return current_user

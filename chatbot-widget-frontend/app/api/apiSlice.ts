@@ -50,7 +50,7 @@ const baseQueryWithReauth: BaseQueryFn<
   const baseQuery = fetchBaseQuery({ baseUrl: BASE_URL, prepareHeaders });
 
   let result = await baseQuery(args, api, extraOptions);
-  if (result?.error?.status === 403) {
+  if (result?.error?.status === 401 || result?.error?.status === 403) {
     localStorage.removeItem("auth-token");
     await fetchAccessToken();
 
