@@ -13,8 +13,9 @@ Backend docs: [chatbot-widget-backend/README.md](./chatbot-widget-backend/README
 
 
 ## Demo
-Below is a recording of a short walkthrough/interaction with the chatbot
-[Demo recording](./chatbot-demo.mov)
+A recording of a short walkthrough/interaction with the chatbot. File may be too large and need to be downloaded in order to be viewed.
+
+[Demo](./chatbot-demo.mov)
 
 
 ## Design Details
