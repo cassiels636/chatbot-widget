@@ -2,7 +2,7 @@ import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
 export const server = setupServer(
-  http.get("http://127.0.0.1:8000/messages/", ({ request, params, cookies }) => {
+  http.get("http://127.0.0.1:8000/messages/", () => {
     return HttpResponse.json([
       {
         id: "1",

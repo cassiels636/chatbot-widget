@@ -27,6 +27,6 @@ def init_db(session: Session, engine: Engine) -> None:
     # Create default chatbot message
     create_message(
         session,
-        MessageCreate(content="Hello, Ask me a question.", from_chatbot=True),
+        MessageCreate(content="Hello! Ask me a question.", from_chatbot=True),
         user.id,
     )
